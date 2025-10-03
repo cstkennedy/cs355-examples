@@ -1,0 +1,8 @@
+[package]
+name = "code_as_ast"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+eyre = "0.6.12"
+syn = { version = "2.0.106", features = ["extra-traits", "full", "printing"] }
