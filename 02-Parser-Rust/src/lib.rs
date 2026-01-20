@@ -5,8 +5,8 @@ use nom::{
     bytes::complete::{tag, take_while_m_n},
     combinator::map_res,
     character::complete::multispace0,
-    sequence::delimited
-
+    sequence::delimited,
+    branch::alt
 };
 
 /// An HTML Color is represented by a combination of red, green and blue. Each
@@ -111,5 +111,12 @@ impl HtmlColorParser {
             .parse(input)?;
 
         Ok((input, HtmlColor { red, green, blue }))
+    }
+
+    pub fn parse_color(input: &str) -> IResult<&str, HtmlColor> {
+        alt((
+            HtmlColorParser::parse_hex_color,
+            HtmlColorParser::parse_rgb_color,
+        )).parse(input)
     }
 }
