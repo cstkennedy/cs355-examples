@@ -1,7 +1,8 @@
 use hamcrest2::prelude::*;
 use rstest::*;
 
-use html_color::*;
+use html_color::prelude::*;
+use html_color::consts::*;
 
 #[rstest]
 pub fn test_default() {
