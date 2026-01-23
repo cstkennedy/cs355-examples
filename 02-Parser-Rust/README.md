@@ -6,7 +6,7 @@ crate.
 
   - The base-16 (hexadecimal) color logic is based on the first nom example.
 
-  - The HtmlColor example is based on my CS 330 Rust Unit Test
+  - The HtmlColor example is based on my CS 330 [Rust Unit Test
     example](https://github.com/cstkennedy/cs330-examples/tree/master/04-Rust-Unit-Testing)
 
 
