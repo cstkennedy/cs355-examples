@@ -29,8 +29,8 @@ impl HtmlColorParser {
 
     fn hex_primary(input: &str) -> IResult<&str, u8> {
         map_res(
-            take_while_m_n(2, 2, HtmlColorParser::is_digit_for_base(16)),
-            HtmlColorParser::from_base(16),
+            take_while_m_n(2, 2, Self::is_digit_for_base(16)),
+            Self::from_base(16),
         )
         .parse(input)
     }
@@ -38,9 +38,9 @@ impl HtmlColorParser {
     pub fn parse_hex_color(input: &str) -> IResult<&str, HtmlColor> {
         map(
             (
-                preceded(tag("#"), HtmlColorParser::hex_primary),
-                HtmlColorParser::hex_primary,
-                HtmlColorParser::hex_primary,
+                preceded(tag("#"), Self::hex_primary),
+                Self::hex_primary,
+                Self::hex_primary,
             ),
             HtmlColor::from,
         )
@@ -49,8 +49,8 @@ impl HtmlColorParser {
 
     fn decimal_primary(input: &str) -> IResult<&str, u8> {
         map_res(
-            take_while_m_n(1, 3, HtmlColorParser::is_digit_for_base(10)),
-            HtmlColorParser::from_base(10),
+            take_while_m_n(1, 3, Self::is_digit_for_base(10)),
+            Self::from_base(10),
         )
         .parse(input)
     }
@@ -58,14 +58,14 @@ impl HtmlColorParser {
     pub fn parse_rgb_color(input: &str) -> IResult<&str, HtmlColor> {
         map(
             (
-                preceded(tag("rgb("), HtmlColorParser::decimal_primary),
+                preceded(tag("rgb("), Self::decimal_primary),
                 preceded(
                     delimited(multispace0, tag(","), multispace0),
-                    HtmlColorParser::decimal_primary,
+                    Self::decimal_primary,
                 ),
                 delimited(
                     delimited(multispace0, tag(","), multispace0),
-                    HtmlColorParser::decimal_primary,
+                    Self::decimal_primary,
                     tag(")"),
                 ),
             ),
@@ -76,8 +76,8 @@ impl HtmlColorParser {
 
     pub fn parse_color(input: &str) -> IResult<&str, HtmlColor> {
         alt((
-            HtmlColorParser::parse_hex_color,
-            HtmlColorParser::parse_rgb_color,
+            Self::parse_hex_color,
+            Self::parse_rgb_color,
         ))
         .parse(input)
     }
