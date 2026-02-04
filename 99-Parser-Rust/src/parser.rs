@@ -1,10 +1,11 @@
 use nom::{
-    IResult, Parser,
+    self, IResult, Parser,
     branch::alt,
     bytes::complete::{tag, take_while_m_n},
     character::complete::multispace0,
     combinator::{map, map_res},
     sequence::{delimited, preceded},
+    Finish,
 };
 
 use crate::HtmlColor;
@@ -75,10 +76,21 @@ impl HtmlColorParser {
     }
 
     pub fn parse_color(input: &str) -> IResult<&str, HtmlColor> {
-        alt((
-            Self::parse_hex_color,
-            Self::parse_rgb_color,
-        ))
-        .parse(input)
+        alt((Self::parse_hex_color, Self::parse_rgb_color)).parse(input)
+    }
+}
+
+// Reference: <https://docs.rs/nom/latest/nom/trait.Finish.html>
+impl std::str::FromStr for HtmlColor {
+    type Err = nom::error::Error<String>;
+
+    fn from_str(raw_str: &str) -> Result<Self, Self::Err> {
+        match HtmlColorParser::parse_color(&raw_str).finish() {
+            Ok((_remaining_str, color)) => Ok(color),
+            Err(nom::error::Error { input, code }) => Err(nom::error::Error {
+                input: input.to_string(),
+                code,
+            }),
+        }
     }
 }
